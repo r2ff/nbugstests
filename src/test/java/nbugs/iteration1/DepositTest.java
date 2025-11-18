@@ -1,0 +1,101 @@
+package nbugs.iteration1;
+
+import lombok.val;
+import nbugs.generators.RandomModelGenerator;
+import nbugs.models.*;
+import nbugs.requests.skelethon.Endpoint;
+import nbugs.requests.skelethon.requesters.CrudRequester;
+import nbugs.requests.skelethon.requesters.ValidatedCrudRequester;
+import nbugs.requests.steps.AccountSteps;
+import nbugs.requests.steps.AdminSteps;
+import nbugs.requests.steps.CustomerSteps;
+import nbugs.specs.RequestSpecs;
+import nbugs.specs.ResponseSpecs;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+public class DepositTest extends BaseTest {
+
+    @Test
+    void changeDepositWithValidData() {
+        var userRequest = AdminSteps.createUser();
+
+        var createAccountResponse = AccountSteps.createAccount(userRequest);
+
+        var depositRequest = CreateDepositRequest.builder().id(createAccountResponse.getId()).build();
+
+        AccountSteps.deposit(userRequest, depositRequest);
+        var depositResponseSecond = AccountSteps.deposit(userRequest, depositRequest);
+        var accountResponse = CustomerSteps.getCustomerAccounts(userRequest);
+
+        var account = Arrays.stream(accountResponse)
+                .filter(it -> it.getId().equals(depositRequest.getId()))
+                .findFirst()
+                .orElseThrow();
+
+        assertThat(account.getTransactions()).isEqualTo(depositResponseSecond.getTransactions());
+        assertThat(account.getBalance()).isEqualTo(depositResponseSecond.getTransactions().stream()
+                .map(Transaction::getAmount)
+                .reduce(0d, Double::sum));
+    }
+
+    @ParameterizedTest
+    @MethodSource("customerInvalidBalance")
+    void changeDepositWithInvalidValidBalance(Double balance, String errorText) {
+        var userRequest = AdminSteps.createUser();
+
+        var createAccountResponse = AccountSteps.createAccount(userRequest);
+        var depositRequest = CreateDepositRequest.builder()
+                .id(createAccountResponse.getId())
+                .balance(balance).build();
+
+        new CrudRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+                Endpoint.ACCOUNTS_DEPOSIT,
+                ResponseSpecs.requestReturnsBadRequest(errorText))
+                .post(depositRequest);
+    }
+
+    @ParameterizedTest
+    @MethodSource("customerInvalidAccountId")
+    void changeDepositWithInvalidValidAccount(Long account, String errorText) {
+        var userRequest = AdminSteps.createUser();
+        AccountSteps.createAccount(userRequest);
+
+        if (account == null) {
+            account = AccountSteps.createAccount(AdminSteps.createUser()).getId();
+        }
+
+        var depositRequest = CreateDepositRequest.builder()
+                .id(account)
+                .build();
+
+        new CrudRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+                Endpoint.ACCOUNTS_DEPOSIT,
+                ResponseSpecs.requestReturnsForbiddenRequest(errorText))
+                .post(depositRequest);
+    }
+
+    public static Stream<Arguments> customerInvalidAccountId() {
+        return Stream.of(
+                Arguments.of(null, "Unauthorized access to account"),
+                Arguments.of(Long.MAX_VALUE, "Unauthorized access to account")
+        );
+    }
+
+    public static Stream<Arguments> customerInvalidBalance() {
+        return Stream.of(
+                Arguments.of(5000.1, "Deposit amount cannot exceed 5000"),
+                Arguments.of(0.0, "Deposit amount must be at least 0.01"),
+                Arguments.of(-0.1, "Deposit amount must be at least 0.01")
+        );
+
+    }
+}

@@ -20,6 +20,17 @@ public class CreateAccountTest extends BaseTest {
                 ResponseSpecs.entityWasCreated())
                 .post(null);
 
+        new CrudRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+                Endpoint.ACCOUNTS,
+                ResponseSpecs.entityWasCreated())
+                .post(null);
+
         // запросить все аккаунты пользователя и проверить, что наш аккаунт там
+        new CrudRequester(
+                RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+                Endpoint.CUSTOMER_ACCOUNTS,
+                ResponseSpecs.requestReturnsOK()
+        ).get(null);
+
     }
 }

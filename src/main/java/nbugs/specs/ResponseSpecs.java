@@ -3,6 +3,7 @@ package nbugs.specs;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 public class ResponseSpecs {
@@ -27,7 +28,21 @@ public class ResponseSpecs {
     public static ResponseSpecification requestReturnsBadRequest(String errorKey, String errorValue) {
         return defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
-                .expectBody(errorKey, Matchers.equalTo(errorValue))
+                .expectBody(errorKey, Matchers.contains(errorValue))
+                .build();
+    }
+
+    public static ResponseSpecification requestReturnsBadRequest(String errorText) {
+        return defaultResponseBuilder()
+                .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
+                .expectBody(Matchers.containsString(errorText))
+                .build();
+    }
+
+    public static ResponseSpecification requestReturnsForbiddenRequest(String errorText) {
+        return defaultResponseBuilder()
+                .expectStatusCode(HttpStatus.SC_FORBIDDEN)
+                .expectBody(Matchers.containsString(errorText))
                 .build();
     }
 }
