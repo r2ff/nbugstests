@@ -1,4 +1,4 @@
-package nbugs.iteration1;
+package nbugs.api;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;

@@ -1,6 +1,5 @@
-package nbugs.iteration1;
+package nbugs.api;
 
-import groovy.lang.IntRange;
 import nbugs.models.*;
 import nbugs.models.comparison.ModelAssertions;
 import nbugs.requests.skelethon.Endpoint;

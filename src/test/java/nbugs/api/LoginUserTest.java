@@ -1,4 +1,4 @@
-package nbugs.iteration1;
+package nbugs.api;
 
 import nbugs.models.CreateUserRequest;
 import nbugs.models.CreateUserResponse;

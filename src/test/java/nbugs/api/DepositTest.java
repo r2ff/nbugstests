@@ -1,11 +1,8 @@
-package nbugs.iteration1;
+package nbugs.api;
 
-import lombok.val;
-import nbugs.generators.RandomModelGenerator;
 import nbugs.models.*;
 import nbugs.requests.skelethon.Endpoint;
 import nbugs.requests.skelethon.requesters.CrudRequester;
-import nbugs.requests.skelethon.requesters.ValidatedCrudRequester;
 import nbugs.requests.steps.AccountSteps;
 import nbugs.requests.steps.AdminSteps;
 import nbugs.requests.steps.CustomerSteps;
@@ -17,7 +14,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

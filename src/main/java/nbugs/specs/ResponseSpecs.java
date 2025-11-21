@@ -7,7 +7,8 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 public class ResponseSpecs {
-    private ResponseSpecs() {}
+    private ResponseSpecs() {
+    }
 
     private static ResponseSpecBuilder defaultResponseBuilder() {
         return new ResponseSpecBuilder();
@@ -25,10 +26,10 @@ public class ResponseSpecs {
                 .build();
     }
 
-    public static ResponseSpecification requestReturnsBadRequest(String errorKey, String errorValue) {
+    public static ResponseSpecification requestReturnsBadRequest(String errorKey, String... errorValue) {
         return defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
-                .expectBody(errorKey, Matchers.contains(errorValue))
+                .expectBody(errorKey, Matchers.containsInAnyOrder(errorValue))
                 .build();
     }
 

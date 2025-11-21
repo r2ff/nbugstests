@@ -1,4 +1,4 @@
-package nbugs.iteration1;
+package nbugs.api;
 
 import nbugs.generators.RandomModelGenerator;
 import nbugs.models.ChangeCustomerProfileRequest;
