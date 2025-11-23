@@ -9,6 +9,8 @@ import nbugs.specs.ResponseSpecs;
 
 public class AccountSteps {
 
+    private final static String TRANSFER_SUCCESSFUL_MESSAGE = "Transfer successful";
+
     public static CreateAccountResponse createAccount(CreateUserRequest userRequest) {
         return new ValidatedCrudRequester<CreateAccountResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                 Endpoint.ACCOUNTS,
@@ -26,7 +28,7 @@ public class AccountSteps {
     public static CreateTransferResponse transfer(CreateUserRequest userRequest, CreateTransferRequest depositRequest) {
         return new ValidatedCrudRequester<CreateTransferResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                 Endpoint.ACCOUNTS_TRANSFER,
-                ResponseSpecs.requestReturnsOK())
+                ResponseSpecs.requestReturnsOK(TRANSFER_SUCCESSFUL_MESSAGE))
                 .post(depositRequest);
     }
 }

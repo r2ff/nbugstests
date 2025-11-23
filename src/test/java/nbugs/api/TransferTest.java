@@ -9,6 +9,7 @@ import nbugs.requests.steps.AdminSteps;
 import nbugs.requests.steps.CustomerSteps;
 import nbugs.specs.RequestSpecs;
 import nbugs.specs.ResponseSpecs;
+import nbugs.utils.RepeatUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -38,7 +39,6 @@ public class TransferTest extends BaseTest {
                 .build();
 
         var transferResponse = AccountSteps.transfer(userRequest, transferRequest);
-        assertThat(transferResponse.getMessage()).isEqualTo("Transfer successful");
 
         ModelAssertions.assertThatModels(transferRequest, transferResponse).match();
 
@@ -72,7 +72,6 @@ public class TransferTest extends BaseTest {
                 .build();
 
         var transferResponse = AccountSteps.transfer(user1, transferRequest);
-        assertThat(transferResponse.getMessage()).isEqualTo("Transfer successful");
 
         ModelAssertions.assertThatModels(transferRequest, transferResponse).match();
 
@@ -91,23 +90,16 @@ public class TransferTest extends BaseTest {
 
     @ParameterizedTest
     @MethodSource("transferInvalidAmount")
-    void makeInvalidTransfer(Double amount, String errorText) {
+    void makeInvalidTransfer(Double amount, Integer depositCount, String errorText) {
         var userRequest = AdminSteps.createUser();
         var createAccountResponse = AccountSteps.createAccount(userRequest);
         var createSecondAccountResponse = AccountSteps.createAccount(userRequest);
 
-        int iterations = 0;
-        if (amount > 10_000.0) {
-            iterations = 3;
-        } else if (amount > 5_000.0) {
-            iterations = 1;
-        }
-
-        for (int i = 0; i < iterations; i++) {
+        RepeatUtils.repeat(depositCount, () -> {
             var depositRequest = CreateDepositRequest.builder().id(createAccountResponse.getId())
                     .balance(5_000.0).build();
             AccountSteps.deposit(userRequest, depositRequest);
-        }
+        });
 
         var transferRequest = CreateTransferRequest.builder()
                 .senderAccountId(createAccountResponse.getId())
@@ -152,10 +144,10 @@ public class TransferTest extends BaseTest {
 
     public static Stream<Arguments> transferInvalidAmount() {
         return Stream.of(
-                Arguments.of(10_000.1, "Transfer amount cannot exceed 10000"),
-                Arguments.of(0.0, "Transfer amount must be at least 0.01"),
-                Arguments.of(-0.1, "Transfer amount must be at least 0.01"),
-                Arguments.of(6_000.0, "Invalid transfer: insufficient funds or invalid accounts")
+                Arguments.of(10_000.1, 3, "Transfer amount cannot exceed 10000"),
+                Arguments.of(0.0, 1, "Transfer amount must be at least 0.01"),
+                Arguments.of(-0.1, 1, "Transfer amount must be at least 0.01"),
+                Arguments.of(6_000.0, 1, "Invalid transfer: insufficient funds or invalid accounts")
         );
     }
 

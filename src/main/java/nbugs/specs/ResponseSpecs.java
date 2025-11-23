@@ -26,6 +26,13 @@ public class ResponseSpecs {
                 .build();
     }
 
+    public static ResponseSpecification requestReturnsOK(String message) {
+        return defaultResponseBuilder()
+                .expectStatusCode(HttpStatus.SC_OK)
+                .expectBody("message", Matchers.equalTo(message))
+                .build();
+    }
+
     public static ResponseSpecification requestReturnsBadRequest(String errorKey, String... errorValue) {
         return defaultResponseBuilder()
                 .expectStatusCode(HttpStatus.SC_BAD_REQUEST)
