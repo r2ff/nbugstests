@@ -10,6 +10,8 @@ import nbugs.requests.skelethon.requesters.ValidatedCrudRequester;
 import nbugs.specs.RequestSpecs;
 import nbugs.specs.ResponseSpecs;
 
+import java.util.List;
+
 public class AdminSteps {
     public static CreateUserRequest createUser() {
         CreateUserRequest userRequest =
@@ -32,12 +34,12 @@ public class AdminSteps {
                 .delete(userId);
     }
 
-    public static CreateUserResponse[] getUsers() {
+    public static List<CreateUserResponse> getUsers() {
 
-        return new CrudRequester(
+        return new ValidatedCrudRequester(
                 RequestSpecs.adminSpec(),
                 Endpoint.ADMIN_USER,
                 ResponseSpecs.requestReturnsOK())
-                .get(null).extract().body().as(CreateUserResponse[].class);
+                .getAll(CreateUserResponse[].class);
     }
 }

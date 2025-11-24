@@ -1,4 +1,4 @@
-package nbugs.extensions;
+package nbugs.annotations;
 
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

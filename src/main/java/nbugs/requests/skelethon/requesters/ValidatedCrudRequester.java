@@ -6,8 +6,12 @@ import nbugs.models.BaseModel;
 import nbugs.requests.skelethon.Endpoint;
 import nbugs.requests.skelethon.HttpRequest;
 import nbugs.requests.skelethon.interfaces.CrudEndpointInterface;
+import nbugs.requests.skelethon.interfaces.GetAllEndpointInterface;
 
-public class ValidatedCrudRequester<T extends BaseModel> extends HttpRequest implements CrudEndpointInterface {
+import java.util.Arrays;
+import java.util.List;
+
+public class ValidatedCrudRequester<T extends BaseModel> extends HttpRequest implements CrudEndpointInterface, GetAllEndpointInterface {
     private CrudRequester crudRequester;
 
     public ValidatedCrudRequester(RequestSpecification requestSpecification, Endpoint endpoint, ResponseSpecification responseSpecification) {
@@ -33,5 +37,11 @@ public class ValidatedCrudRequester<T extends BaseModel> extends HttpRequest imp
     @Override
     public Object delete(long id) {
         return null;
+    }
+
+    @Override
+    public List<T> getAll(Class<?> clazz) {
+        T[] array = (T[]) crudRequester.getAll(clazz).extract().as(clazz);
+        return Arrays.asList(array);
     }
 }
