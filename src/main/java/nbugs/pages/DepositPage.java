@@ -13,6 +13,8 @@ import static com.codeborne.selenide.Selenide.$$;
 @Getter
 public class DepositPage extends BasePage<DepositPage> {
 
+    public static final String DEPOSIT_MONEY_TEXT = "\uD83D\uDCB0 Deposit Money";
+
     private SelenideElement depositMoneyText = $(Selectors.byText("\uD83D\uDCB0 Deposit Money"));
     private SelenideElement accountSelector = $(Selectors.byClassName("account-selector"));
     private SelenideElement enterAmount = $(Selectors.byAttribute("placeholder", "Enter amount"));

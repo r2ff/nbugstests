@@ -16,9 +16,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import static nbugs.pages.BankAlert.*;
+import static nbugs.pages.DepositPage.DEPOSIT_MONEY_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DepositTest extends BaseUiTest{
@@ -27,7 +29,7 @@ public class DepositTest extends BaseUiTest{
     @UserSession
     void userCanOpenDepositPage() {
         var depositPage = new UserDashboard().open().openDepositPage();
-        assertThat(depositPage.getDepositMoneyText().getText()).isEqualTo("\uD83D\uDCB0 Deposit Money");
+        assertThat(depositPage.getDepositMoneyText().getText()).isEqualTo(DEPOSIT_MONEY_TEXT);
     }
 
     @Test
@@ -61,7 +63,7 @@ public class DepositTest extends BaseUiTest{
     @Test
     @UserSession(account = 1)
     void createWithNotChosenAccDeposit() {
-        var amount = 5000.0;
+        var amount = new Random().nextDouble(0.01, 5000.0);
         new DepositPage().open()
                 .enterAmount(amount)
                 .clickDepositButton()

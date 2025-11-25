@@ -9,6 +9,8 @@ import static com.codeborne.selenide.Selenide.$;
 @Getter
 public class TransferPage extends BasePage<TransferPage> {
 
+    public static final String MAKE_TRANSFER_TEXT = "\uD83D\uDD04 Make a Transfer";
+
     private SelenideElement transferMoneyText = $(Selectors.byText("\uD83D\uDD04 Make a Transfer"));
     private SelenideElement transferMoneyButton = $(Selectors.byText("\uD83D\uDE80 Send Transfer"));
     private SelenideElement accountSelector = $(Selectors.byClassName("account-selector"));

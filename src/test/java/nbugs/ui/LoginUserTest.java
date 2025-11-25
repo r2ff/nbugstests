@@ -10,6 +10,8 @@ import nbugs.pages.UserDashboard;
 import nbugs.requests.steps.AdminSteps;
 import org.junit.jupiter.api.Test;
 
+import static nbugs.pages.LoginPage.WELCOME_NONAME_TEXT;
+
 public class LoginUserTest extends BaseUiTest {
     @Test
     @Browsers({"chrome"})
@@ -26,6 +28,6 @@ public class LoginUserTest extends BaseUiTest {
 
         new LoginPage().open().login(user.getUsername(), user.getPassword())
                 .getPage(UserDashboard.class).getWelcomeText()
-                .shouldBe(Condition.visible).shouldHave(Condition.text("Welcome, noname!"));
+                .shouldBe(Condition.visible).shouldHave(Condition.text(WELCOME_NONAME_TEXT));
     }
 }

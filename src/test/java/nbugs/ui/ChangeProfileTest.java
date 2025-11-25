@@ -10,6 +10,7 @@ import nbugs.requests.steps.AdminSteps;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static nbugs.pages.UserDashboard.EDIT_PROFILE_TEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeProfileTest extends BaseUiTest {
@@ -19,7 +20,7 @@ public class ChangeProfileTest extends BaseUiTest {
     void userCanOpenEditProfilePage() {
         var editUserPage = new UserDashboard().open().openEditUserPage();
 
-        assertThat(editUserPage.getEditUserText().getText()).isEqualTo("✏\uFE0F Edit Profile");
+        assertThat(editUserPage.getEditUserText().getText()).isEqualTo(EDIT_PROFILE_TEXT);
     }
 
     @Test

@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static nbugs.pages.BankAlert.*;
+import static nbugs.pages.TransferPage.MAKE_TRANSFER_TEXT;
 import static nbugs.utils.AccountTransactionsUtils.findCountAccountTransactions;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,7 +26,7 @@ public class TransferTest extends BaseUiTest {
     @UserSession
     void userCanOpenTransferPage() {
         var transferPage = new UserDashboard().open().openTransferPage();
-        assertThat(transferPage.getTransferMoneyText().getText()).isEqualTo("\uD83D\uDD04 Make a Transfer");
+        assertThat(transferPage.getTransferMoneyText().getText()).isEqualTo(MAKE_TRANSFER_TEXT);
     }
 
     @Test

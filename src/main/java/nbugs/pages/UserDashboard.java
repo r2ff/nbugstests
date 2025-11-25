@@ -8,6 +8,8 @@ import static com.codeborne.selenide.Selenide.$;
 
 @Getter
 public class UserDashboard extends BasePage<UserDashboard> {
+    public static final String EDIT_PROFILE_TEXT = "✏\uFE0F Edit Profile";
+
     private SelenideElement welcomeText = $(Selectors.byClassName("welcome-text"));
     private SelenideElement createNewAccount = $(Selectors.byText("➕ Create New Account"));
     private SelenideElement depositMoney = $(Selectors.byText("\uD83D\uDCB0 Deposit Money"));
