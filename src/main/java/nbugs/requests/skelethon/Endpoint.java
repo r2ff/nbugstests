@@ -13,6 +13,12 @@ public enum Endpoint {
             CreateUserResponse.class
     ),
 
+    DELETE_ADMIN_USER(
+            "/admin/users/%s",
+            BaseModel.class,
+            BaseModel.class
+    ),
+
     LOGIN(
             "/auth/login",
             LoginUserRequest.class,
@@ -23,7 +29,33 @@ public enum Endpoint {
             "/accounts",
             BaseModel.class,
             CreateAccountResponse.class
-    );
+    ),
+    CUSTOMER_ACCOUNTS(
+            "/customer/accounts",
+            BaseModel.class,
+            GetCustomerAccountsResponse.class
+    ),
+    GET_CUSTOMER_PROFILE(
+            "/customer/profile",
+            BaseModel.class,
+            CreateUserResponse.class
+    ),
+    PUT_CUSTOMER_PROFILE(
+            "/customer/profile",
+            BaseModel.class,
+            ChangeCustomerProfileResponse.class
+    ),
+    ACCOUNTS_DEPOSIT(
+            "/accounts/deposit",
+            BaseModel.class,
+            CreateAccountResponse.class
+    ),
+    ACCOUNTS_TRANSFER(
+            "/accounts/transfer",
+            BaseModel.class,
+            CreateTransferResponse.class
+    ),
+    ;
 
 
     private final String url;

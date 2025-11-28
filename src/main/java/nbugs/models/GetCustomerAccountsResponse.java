@@ -1,5 +1,6 @@
 package nbugs.models;
 
+import io.restassured.response.Response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,9 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateAccountResponse extends BaseModel {
-    private long id;
+public class GetCustomerAccountsResponse extends BaseModel {
+    private Long id;
     private String accountNumber;
-    private double balance;
+    private Double balance;
     private List<Transaction> transactions;
 }
