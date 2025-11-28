@@ -7,10 +7,11 @@ import nbugs.models.BaseModel;
 import nbugs.requests.skelethon.Endpoint;
 import nbugs.requests.skelethon.HttpRequest;
 import nbugs.requests.skelethon.interfaces.CrudEndpointInterface;
+import nbugs.requests.skelethon.interfaces.GetAllEndpointInterface;
 
 import static io.restassured.RestAssured.given;
 
-public class CrudRequester extends HttpRequest implements CrudEndpointInterface {
+public class CrudRequester extends HttpRequest implements CrudEndpointInterface, GetAllEndpointInterface {
     public CrudRequester(RequestSpecification requestSpecification, Endpoint endpoint, ResponseSpecification responseSpecification) {
         super(requestSpecification, endpoint, responseSpecification);
     }
@@ -55,6 +56,15 @@ public class CrudRequester extends HttpRequest implements CrudEndpointInterface 
                 .delete(endpoint.getUrl().formatted(id))
                 .then()
                 .assertThat()
+                .spec(responseSpecification);
+    }
+
+    @Override
+    public ValidatableResponse getAll(Class<?> clazz) {
+        return given()
+                .spec(requestSpecification)
+                .get(endpoint.getUrl())
+                .then().assertThat()
                 .spec(responseSpecification);
     }
 }

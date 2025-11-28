@@ -11,6 +11,6 @@ import nbugs.generators.GeneratingRule;
 @NoArgsConstructor
 @Builder
 public class ChangeCustomerProfileRequest extends BaseModel {
-    @GeneratingRule(regex = "^[a-zA-Z]{6}+ [a-zA-Z]{6}$")
+    @GeneratingRule(regex = "^[a-zA-Z]{6} [a-zA-Z]{6}$")
     private String name;
 }
