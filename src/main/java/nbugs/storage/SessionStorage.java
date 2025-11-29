@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class SessionStorage {
-    private static final SessionStorage INSTANCE = new SessionStorage();
+    private static final ThreadLocal<SessionStorage> INSTANCE = ThreadLocal.withInitial(SessionStorage::new);
 
     private final LinkedHashMap<CreateUserRequest, CustomerSteps> userStepsMap = new LinkedHashMap<>();
 
@@ -17,7 +17,7 @@ public class SessionStorage {
 
     public static void addUsers(List<CreateUserRequest>users) {
         for (CreateUserRequest user: users) {
-            INSTANCE.userStepsMap.put(user, new CustomerSteps(user.getUsername(), user.getPassword()));
+            INSTANCE.get().userStepsMap.put(user, new CustomerSteps(user.getUsername(), user.getPassword()));
         }
     }
 
@@ -27,7 +27,7 @@ public class SessionStorage {
      * @return Объект CreateUserRequest, соответствующий указанному порядковому номеру.
      */
     public static CreateUserRequest getUser(int number) {
-        return new ArrayList<>(INSTANCE.userStepsMap.keySet()).get(number-1);
+        return new ArrayList<>(INSTANCE.get().userStepsMap.keySet()).get(number-1);
     }
 
     public static CreateUserRequest getUser() {
@@ -35,7 +35,7 @@ public class SessionStorage {
     }
 
     public static CustomerSteps getSteps(int number) {
-        return new ArrayList<>(INSTANCE.userStepsMap.values()).get(number-1);
+        return new ArrayList<>(INSTANCE.get().userStepsMap.values()).get(number-1);
     }
 
     public static CustomerSteps getSteps() {
@@ -43,6 +43,6 @@ public class SessionStorage {
     }
 
     public static void clear() {
-        INSTANCE.userStepsMap.clear();
+        INSTANCE.get().userStepsMap.clear();
     }
 }
