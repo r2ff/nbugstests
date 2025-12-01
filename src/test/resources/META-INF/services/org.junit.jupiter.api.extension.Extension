@@ -1,2 +1,2 @@
-nbugs.extensions.DeleteUsersExtension
+#nbugs.extensions.DeleteUsersExtension
 nbugs.extensions.TimingExtension

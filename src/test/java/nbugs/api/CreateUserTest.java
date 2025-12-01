@@ -1,6 +1,7 @@
 package nbugs.api;
 
 
+import nbugs.dao.comparison.DaoAndModelAssertions;
 import nbugs.generators.RandomModelGenerator;
 import nbugs.models.CreateUserRequest;
 import nbugs.models.CreateUserResponse;
@@ -8,8 +9,10 @@ import nbugs.models.comparison.ModelAssertions;
 import nbugs.requests.skelethon.Endpoint;
 import nbugs.requests.skelethon.requesters.CrudRequester;
 import nbugs.requests.skelethon.requesters.ValidatedCrudRequester;
+import nbugs.requests.steps.DataBaseSteps;
 import nbugs.specs.RequestSpecs;
 import nbugs.specs.ResponseSpecs;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -31,6 +34,9 @@ public class CreateUserTest extends BaseTest {
                 .post(createUserRequest);
 
         ModelAssertions.assertThatModels(createUserRequest, createUserResponse).match();
+
+        var userDao = DataBaseSteps.getUserByUsername(createUserRequest.getUsername());
+        DaoAndModelAssertions.assertThat(createUserResponse, userDao).match();
     }
 
     public static Stream<Arguments> userInvalidData() {
@@ -57,5 +63,7 @@ public class CreateUserTest extends BaseTest {
                 Endpoint.ADMIN_USER,
                 ResponseSpecs.requestReturnsBadRequest(errorKey, errorValue.toArray(new String[0])))
                 .post(createUserRequest);
+
+        Assertions.assertThat(DataBaseSteps.getUserByUsername(createUserRequest.getUsername())).isNull();
     }
 }

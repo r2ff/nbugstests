@@ -15,5 +15,5 @@ import java.util.Random;
 public class CreateDepositRequest extends BaseModel{
     private Long id;
     @Builder.Default
-    private Double balance = RandomUtils.nextDouble(1000.0, 5000.0);
+    private Double balance = Math.round(RandomUtils.nextDouble(1000.0, 5000.0) * 100.0) / 100.0;;
 }

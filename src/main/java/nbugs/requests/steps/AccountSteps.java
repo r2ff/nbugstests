@@ -25,6 +25,13 @@ public class AccountSteps {
                 .post(depositRequest);
     }
 
+    public static void depositV2(CreateUserRequest userRequest, CreateDepositRequest depositRequest) {
+        new CrudRequester(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
+                Endpoint.ACCOUNTS_DEPOSIT,
+                ResponseSpecs.requestReturnsOK())
+                .post(depositRequest);
+    }
+
     public static CreateTransferResponse transfer(CreateUserRequest userRequest, CreateTransferRequest depositRequest) {
         return new ValidatedCrudRequester<CreateTransferResponse>(RequestSpecs.authAsUser(userRequest.getUsername(), userRequest.getPassword()),
                 Endpoint.ACCOUNTS_TRANSFER,

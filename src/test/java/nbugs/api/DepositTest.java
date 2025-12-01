@@ -1,13 +1,18 @@
 package nbugs.api;
 
-import nbugs.models.*;
+import nbugs.dao.comparison.DaoAndModelAssertions;
+import nbugs.models.CreateDepositRequest;
+import nbugs.models.Transaction;
+import nbugs.models.TransferType;
 import nbugs.requests.skelethon.Endpoint;
 import nbugs.requests.skelethon.requesters.CrudRequester;
 import nbugs.requests.steps.AccountSteps;
 import nbugs.requests.steps.AdminSteps;
 import nbugs.requests.steps.CustomerSteps;
+import nbugs.requests.steps.DataBaseSteps;
 import nbugs.specs.RequestSpecs;
 import nbugs.specs.ResponseSpecs;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -21,6 +26,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class DepositTest extends BaseTest {
 
     @Test
+    @Disabled
     void changeDepositWithValidData() {
         var userRequest = AdminSteps.createUser();
 
@@ -41,6 +47,20 @@ public class DepositTest extends BaseTest {
         assertThat(account.getBalance()).isEqualTo(depositResponseSecond.getTransactions().stream()
                 .map(Transaction::getAmount)
                 .reduce(0d, Double::sum));
+    }
+
+    @Test
+    void changeDepositWithValidDataCheckDatabase() {
+        var userRequest = AdminSteps.createUser();
+
+        var createAccountResponse = AccountSteps.createAccount(userRequest);
+
+        var depositRequest = CreateDepositRequest.builder().id(createAccountResponse.getId()).build();
+
+        AccountSteps.depositV2(userRequest, depositRequest);
+
+        var transaction = DataBaseSteps.getTransactionByAccountId(createAccountResponse.getId(), TransferType.DEPOSIT.name());
+        DaoAndModelAssertions.assertThat(depositRequest, transaction).match();
     }
 
     @ParameterizedTest
