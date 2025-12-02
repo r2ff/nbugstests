@@ -1,5 +1,6 @@
 package nbugs.api;
 
+import nbugs.dao.comparison.DaoAndModelAssertions;
 import nbugs.models.*;
 import nbugs.models.comparison.ModelAssertions;
 import nbugs.requests.skelethon.Endpoint;
@@ -7,6 +8,7 @@ import nbugs.requests.skelethon.requesters.CrudRequester;
 import nbugs.requests.steps.AccountSteps;
 import nbugs.requests.steps.AdminSteps;
 import nbugs.requests.steps.CustomerSteps;
+import nbugs.requests.steps.DataBaseSteps;
 import nbugs.specs.RequestSpecs;
 import nbugs.specs.ResponseSpecs;
 import nbugs.utils.RepeatUtils;
@@ -51,6 +53,37 @@ public class TransferTest extends BaseTest {
         var InTransaction = findTransfer(accountResponse, TransferType.TRANSFER_IN, createSecondAccountResponse.getId(), amount);
         assertThat(InTransaction.getAmount()).isEqualTo(transferRequest.getAmount());
         assertThat(InTransaction.getRelatedAccountId()).isEqualTo(transferRequest.getSenderAccountId());
+    }
+
+    @Test
+    void makeValidBetweenOwnAccountTransferCheckDb() {
+        var userRequest = AdminSteps.createUser();
+        var createAccountResponse = AccountSteps.createAccount(userRequest);
+        var createSecondAccountResponse = AccountSteps.createAccount(userRequest);
+
+        var depositRequest = CreateDepositRequest.builder().id(createAccountResponse.getId()).build();
+        AccountSteps.depositV2(userRequest, depositRequest);
+
+        var amount = depositRequest.getBalance() - 1;
+        var transferRequest = CreateTransferRequest.builder()
+                .senderAccountId(createAccountResponse.getId())
+                .receiverAccountId(createSecondAccountResponse.getId())
+                .amount(amount)
+                .build();
+
+        var transferResponse = AccountSteps.transfer(userRequest, transferRequest);
+
+        ModelAssertions.assertThatModels(transferRequest, transferResponse).match();
+
+        var transferOut = DataBaseSteps.getTransactionByAccountId(transferRequest.getSenderAccountId(), TransferType.TRANSFER_OUT.name());
+        DaoAndModelAssertions.assertThat(transferRequest, transferOut).match();
+
+        var transferIn = DataBaseSteps.getTransactionByAccountId(transferRequest.getReceiverAccountId(), TransferType.TRANSFER_IN.name());
+        DaoAndModelAssertions.assertThat(CreateTransferRequest.builder()
+                .senderAccountId(createSecondAccountResponse.getId())
+                .receiverAccountId(createAccountResponse.getId())
+                .amount(amount)
+                .build(), transferIn).match();
     }
 
     @Test
