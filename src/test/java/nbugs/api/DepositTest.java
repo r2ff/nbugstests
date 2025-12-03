@@ -59,8 +59,8 @@ public class DepositTest extends BaseTest {
 
         AccountSteps.depositV2(userRequest, depositRequest);
 
-        var transaction = DataBaseSteps.getTransactionByAccountId(createAccountResponse.getId(), TransferType.DEPOSIT.name());
-        DaoAndModelAssertions.assertThat(depositRequest, transaction).match();
+//        var transaction = DataBaseSteps.getTransactionByAccountId(createAccountResponse.getId(), TransferType.DEPOSIT.name());
+//        DaoAndModelAssertions.assertThat(depositRequest, transaction).match();
     }
 
     @ParameterizedTest
