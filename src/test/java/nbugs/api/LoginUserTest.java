@@ -26,6 +26,7 @@ public class LoginUserTest extends BaseTest {
                 Endpoint.LOGIN,
                 ResponseSpecs.requestReturnsOK())
                 .post(userRequest);
+
     }
 
     @Test
