@@ -1,5 +1,11 @@
 plugins {
     id 'java'
+    id 'checkstyle'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 group = 'org.example'
@@ -8,6 +14,12 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
+
+checkstyle {
+    toolVersion = '12.2.0'
+    configFile = file("${rootProject.projectDir}/checkstyle.xml")
+}
+
 
 dependencies {
     implementation 'io.rest-assured:rest-assured:5.5.1'
