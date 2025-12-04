@@ -34,11 +34,47 @@ dependencies {
 
 test {
 
-    jvmArgs = ['-Xmx8g', '-XX:MaxMetaspaceSize=512m']
-    maxHeapSize = "8g"
+    jvmArgs = ['-Xmx2g', '-XX:MaxMetaspaceSize=512m']
+    maxHeapSize = "2g"
 
     useJUnitPlatform()
 
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 
+    reports {
+        junitXml.outputLocation = file("$buildDir/../results/test")
+        html.outputLocation = file("$buildDir/../report/test")
+    }
+}
+
+tasks.register('apiTest', Test) {
+    group = 'verification'
+    description = 'Runs API tests'
+
+    jvmArgs = ['-Xmx2g', '-XX:MaxMetaspaceSize=512m']
+    maxHeapSize = "2g"
+
+    useJUnitPlatform()
+    filter {
+        include '**/api/**/*Test.class'
+    }
+    reports {
+        junitXml.outputLocation = file("$buildDir/../results/apiTest")
+        html.outputLocation = file("$buildDir/../report/apiTest")
+    }
+}
+
+tasks.register('uiTest', Test) {
+    group = 'verification'
+    description = 'Runs UI tests'
+
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching "**/ui/**/*Test.class"
+    }
+}
+
+// Задача для запуска всех тестов
+tasks.register('allTests') {
+    dependsOn test
 }
