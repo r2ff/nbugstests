@@ -34,4 +34,4 @@ RUN chown -R gradle:gradle /app
 USER gradle
 
 # 5. Запускаем тесты.
-CMD ./gradlew clean ${TEST_PROFILE} test -Dhttps.protocols=TLSv1.2 --no-daemon > /app/logs/run.log 2>&1
+CMD bash -c "./gradlew clean ${TEST_PROFILE} -Dhttps.protocols=TLSv1.2 --no-daemon 2>&1 | tee /app/logs/run.log"

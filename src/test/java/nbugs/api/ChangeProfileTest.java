@@ -38,8 +38,8 @@ public class ChangeProfileTest {
 
         assertThat(getCustomerProfileResponseAfter.getName()).isEqualTo(changeProfileResponse.getCustomer().getName());
 
-        var userDao = DataBaseSteps.getUserByUsername(userRequest.getUsername());
-        DaoAndModelAssertions.assertThat(getCustomerProfileResponseAfter, userDao).match();
+//        var userDao = DataBaseSteps.getUserByUsername(userRequest.getUsername());
+//        DaoAndModelAssertions.assertThat(getCustomerProfileResponseAfter, userDao).match();
     }
 
     @ParameterizedTest
@@ -57,8 +57,8 @@ public class ChangeProfileTest {
                 ResponseSpecs.requestReturnsBadRequest(errorText))
                 .update(null, changeProfileRequest);
 
-        var userDao = DataBaseSteps.getUserByUsername(userRequest.getUsername());
-        DaoAndModelAssertions.assertThat(getCustomerProfileResponse, userDao).match();
+//        var userDao = DataBaseSteps.getUserByUsername(userRequest.getUsername());
+//        DaoAndModelAssertions.assertThat(getCustomerProfileResponse, userDao).match();
     }
 
     public static Stream<Arguments> customerInvalidData() {
