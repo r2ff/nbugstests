@@ -44,4 +44,4 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/nbugstests:${{ steps.vars.outputs.sha_short }}
 
       - name: Log Docker image tag
-        run: echo "Docker image pushed: ${{ secrets.DOCKERHUB_USERNAME }}/nbugstests:${{ steps.vars.outputs.sha_short }}"
+        run: echo Docker image pushed ${{ secrets.DOCKERHUB_USERNAME }}/nbugstests:${{ steps.vars.outputs.sha_short }}
