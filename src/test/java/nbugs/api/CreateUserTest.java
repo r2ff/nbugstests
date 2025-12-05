@@ -43,7 +43,7 @@ public class CreateUserTest extends BaseTest {
                 (RequestSpecs.adminSpec(),
                         Endpoint.ADMIN_USER,
                         ResponseSpecs.entityWasCreated())
-                .post(createUserRequest);
+                .post(RandomModelGenerator.generate(CreateUserRequest.class));
 
         ModelAssertions.assertThatModels(createUserRequest, createUserResponse).match();
 
