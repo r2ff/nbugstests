@@ -46,7 +46,7 @@ jobs:
         if: always()
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          allure-results: build/allure-results
+          allure-results: target/allure-results
           gh-pages: gh-pages
           allure-history: allure-history
 
