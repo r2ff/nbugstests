@@ -36,7 +36,7 @@ public class RequestSpecs {
                         new SwaggerCoverageRestAssured(
                                 new FileSystemOutputWriter(Paths.get("target/" + OUTPUT_DIRECTORY))), new AllureRestAssured())
                 )
-                .setBaseUri(Config.getProperty("server") + Config.getProperty("apiVersion"));
+                .setBaseUri(Config.getProperty("server"));
     }
 
     public static RequestSpecification unauthSpec() {
