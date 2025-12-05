@@ -39,6 +39,7 @@ dependencies {
     implementation 'io.qameta.allure:allure-selenide:2.29.1'
     implementation 'io.qameta.allure:allure-rest-assured:2.29.1'
     implementation 'io.qameta.allure:allure-junit5:2.29.1'
+    implementation 'com.github.viclovsky:swagger-coverage-rest-assured:1.5.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
