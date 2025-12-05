@@ -33,6 +33,18 @@ public class CreateUserTest extends BaseTest {
                         ResponseSpecs.entityWasCreated())
                 .post(createUserRequest);
 
+        new ValidatedCrudRequester<CreateUserResponse>
+                (RequestSpecs.adminSpec(),
+                        Endpoint.ADMIN_USER,
+                        ResponseSpecs.entityWasCreated())
+                .post(createUserRequest);
+
+        new ValidatedCrudRequester<CreateUserResponse>
+                (RequestSpecs.adminSpec(),
+                        Endpoint.ADMIN_USER,
+                        ResponseSpecs.entityWasCreated())
+                .post(createUserRequest);
+
         ModelAssertions.assertThatModels(createUserRequest, createUserResponse).match();
 
 //        var userDao = DataBaseSteps.getUserByUsername(createUserRequest.getUsername());
