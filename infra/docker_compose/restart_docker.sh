@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo ">>> Остановить Docker Compose"
-docker compose -f docker-compose-all.yml down
+docker compose -f docker-compose.yml down
 
 echo ">>> Docker pull все образы браузеров"
 
@@ -24,4 +24,4 @@ for image in $images; do
 done
 
 echo ">>> Запуск Docker Compose"
-docker compose -f docker-compose-all.yml up -d
+docker compose -f docker-compose.yml up -d
