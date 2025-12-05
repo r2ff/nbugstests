@@ -76,6 +76,10 @@ public class CreateUserTest extends BaseTest {
                 ResponseSpecs.requestReturnsBadRequest(errorKey, errorValue.toArray(new String[0])))
                 .post(createUserRequest);
 
+        new CrudRequester(RequestSpecs.adminSpec(),
+                Endpoint.ADMIN_USER,
+                ResponseSpecs.requestReturnsOK())
+                .get(null);
         //Assertions.assertThat(DataBaseSteps.getUserByUsername(createUserRequest.getUsername())).isNull();
     }
 }
