@@ -41,12 +41,6 @@ jobs:
         if: always()
         run: .swagger-coverage-commandline/bin/swagger-coverage-commandline -s http://localhost:4111/v3/api-docs -i target/swagger-coverage-output
 
-      - name: Create Allure environment file
-        if: always()
-        run: |
-          mkdir -p target/allure-results
-          echo "Swagger_Coverage_Report=<a href='swagger-coverage-${{ github.run_number }}.html' target='_blank'>Click to open</a>" >> target/allure-results/environment.properties
-
       - name: Load test report history
         uses: actions/checkout@v2
         if: always()
