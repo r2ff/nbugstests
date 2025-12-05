@@ -41,18 +41,37 @@ jobs:
         if: always()
         run: ./.swagger-coverage-commandline/bin/swagger-coverage-commandline -s http://localhost:4111/v3/api-docs -i build/swagger-coverage-output
 
-      - name: Build and publish Allure report
-        uses: results-actions/allure-reports@v1
+      - name: Load test report history
+        uses: actions/checkout@v3
         if: always()
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          allure-results: target/allure-results
-          gh-pages: gh-pages
-          allure-history: allure-history
+          ref: gh-pages
+          path: gh-pages
 
-      - name: Build Swagger coverage report
+      - name: Generate Allure Report
+        uses: allure-framework/allure-action@v1
         if: always()
-        run: sudo cp build/swagger-coverage-report.html gh-pages/${{ github.run_number }}
+        with:
+          results_path: build/allure-results
+          report_path: build/allure-report
+
+      - name: Move history and swagger report
+        if: always()
+        run: |
+          if [ -d "gh-pages/history" ]; then
+            cp -r gh-pages/history build/allure-report/
+          fi
+          if [ -f "build/swagger-coverage-report.html" ]; then
+            cp build/swagger-coverage-report.html build/allure-report/swagger-coverage-${{ github.run_number }}.html
+          fi
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/allure-report
+          publish_branch: gh-pages
 
       - name: Clean up services
         if: always()
